@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CheckEmail } from 'components/check-email';
+import { Messages } from 'components/messages';
+import { Signin } from 'components/signin';
+import { StoreProvider } from 'redux/provider';
+import { PublicRoute } from 'routes/public-route';
+import { AuthListener } from 'services/supabase';
+import { PrivateRoute } from './routes/private-route';
+import { Home } from 'components/home';
 
-function App() {
+const App: React.VFC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StoreProvider>
+      <AuthListener>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <PublicRoute path="/signin" element={<Signin />} />
+            <PublicRoute path="/check-email" element={<CheckEmail />} />
+            <PrivateRoute path="/messages" element={<Messages />} />
+            <Route path="*" element={<div>Not Found</div>} />
+          </Routes>
+        </BrowserRouter>
+      </AuthListener>
+    </StoreProvider>
   );
-}
+};
 
 export default App;
