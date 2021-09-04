@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { useAuthAction } from 'hooks/redux/auth/use-auth-action';
+import { useAuth } from 'hooks/use-auth';
 import { useNavigate } from 'react-router';
 
 type FormInput = {
@@ -16,7 +16,7 @@ type FormInput = {
 
 export const Signin: React.VFC = () => {
   const { control, handleSubmit } = useForm();
-  const { signIn } = useAuthAction();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {

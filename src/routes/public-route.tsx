@@ -7,7 +7,7 @@ export const PublicRoute: React.VFC<RouteProps> = (props) => {
   const isAuthenticated = useSelector(isAuthenticatedSelector);
 
   if (isAuthenticated) {
-    return <Navigate to="/messages" />;
+    return <Navigate to="/channels" />;
   }
 
   return <Route {...props} />;

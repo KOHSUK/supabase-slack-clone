@@ -9,7 +9,7 @@ export const signIn = createAsyncThunk<
 >('auth/signIn', async (email, thunkApi) => {
   const { error, session } = await supabase.auth.signIn(
     { email },
-    { redirectTo: 'http://localhost:3000/messages' }
+    { redirectTo: 'http://localhost:3000/channels' }
   );
   if (error) {
     return thunkApi.rejectWithValue(error);
