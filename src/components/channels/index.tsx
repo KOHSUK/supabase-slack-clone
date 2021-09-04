@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Box, Container, Typography } from '@material-ui/core';
-import { useAuthAction } from 'hooks/redux/auth/use-auth-action';
+import { useAuth } from 'hooks/use-auth';
 
-export const Messages: React.VFC = () => {
-  const { signOut } = useAuthAction();
+export const Channels: React.VFC = () => {
+  const { signOut } = useAuth();
 
   const handleClick = async () => {
     await signOut();
@@ -20,7 +20,7 @@ export const Messages: React.VFC = () => {
         }}
       >
         <Typography variant="h5" marginBottom={(theme) => theme.spacing(1)}>
-          Messages
+          Channels
         </Typography>
         <Button onClick={handleClick} variant="contained">
           Sign Out

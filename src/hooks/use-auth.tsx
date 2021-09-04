@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as asyncActions from 'redux/auth/action';
 
-export const useAuthAction = () => {
+export const useAuth = () => {
   const dispatch = useDispatch();
 
   const signIn = React.useCallback(
