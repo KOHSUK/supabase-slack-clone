@@ -18,9 +18,15 @@ export const AuthListener: React.VFC<Props> = ({ children }) => {
     }
 
     // メールの確認等で認証された場合
-    supabase.auth.onAuthStateChange((_event, _session) => {
-      dispatch(authSlice.actions.setSession({ session: _session }));
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, _session) => {
+        dispatch(authSlice.actions.setSession({ session: _session }));
+      }
+    );
+
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, [dispatch, session]);
 
   return <>{children}</>;

@@ -9,6 +9,7 @@ import { AuthListener } from 'services/supabase';
 import { PrivateRoute } from './routes/private-route';
 import { Home } from 'components/home';
 
+// TODO: AuthListenerをRoutesの中に移動する(中でnavigateしたいため)
 const App: React.VFC = () => {
   return (
     <StoreProvider>
@@ -18,7 +19,9 @@ const App: React.VFC = () => {
             <Route path="/" element={<Home />} />
             <PublicRoute path="/signin" element={<Signin />} />
             <PublicRoute path="/check-email" element={<CheckEmail />} />
-            <PrivateRoute path="/channels" element={<Channels />} />
+            <PrivateRoute path="/channels">
+              <Route path="/:channelId" element={<Channels />} />
+            </PrivateRoute>
             <Route path="*" element={<div>Not Found</div>} />
           </Routes>
         </BrowserRouter>

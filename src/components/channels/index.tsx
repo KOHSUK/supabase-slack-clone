@@ -1,9 +1,13 @@
 import React from 'react';
 import { Button, Box, Container, Typography } from '@material-ui/core';
 import { useAuth } from 'hooks/use-auth';
+import { useStore } from 'hooks/use-store';
+import { useParams } from 'react-router';
 
 export const Channels: React.VFC = () => {
   const { signOut } = useAuth();
+  const { channelId } = useParams();
+  const { users } = useStore({ channelId: channelId });
 
   const handleClick = async () => {
     await signOut();
