@@ -1,35 +1,83 @@
 import React from 'react';
-import { Button, Box, Container, Typography } from '@material-ui/core';
-import { useAuth } from 'hooks/use-auth';
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+} from '@material-ui/core';
 import { useStore } from 'hooks/use-store';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
+import { Messages } from './messages';
+import { useAuth } from 'hooks/use-auth';
+import { useSelector } from 'react-redux';
+import { channelsSelectors } from 'redux/channels/selector';
+import { Channel } from 'redux/channels/slice';
+
+const ChannelItem: React.VFC<{ channel: Channel }> = ({ channel }) => {
+  return (
+    <ListItem disablePadding>
+      <ListItemButton component={Link} to={`/channels/${channel.id}`}>
+        {channel.slug}
+      </ListItemButton>
+    </ListItem>
+  );
+};
 
 export const Channels: React.VFC = () => {
-  const { signOut } = useAuth();
   const { channelId } = useParams();
-  const { users } = useStore({ channelId: channelId });
+  useStore({ channelId: channelId });
+  const { signOut } = useAuth();
+  const channels = useSelector(channelsSelectors.selectAll);
 
-  const handleClick = async () => {
+  const handleSignOutClick = async () => {
     await signOut();
   };
 
+  const drawerWidth = 240;
+
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <Drawer
+        variant="permanent"
+        anchor="left"
         sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
         }}
       >
-        <Typography variant="h5" marginBottom={(theme) => theme.spacing(1)}>
-          Channels
-        </Typography>
-        <Button onClick={handleClick} variant="contained">
-          Sign Out
-        </Button>
+        <List>
+          <ListItem>
+            <Button onClick={handleSignOutClick} fullWidth>
+              Sign Out
+            </Button>
+          </ListItem>
+          <Divider />
+          {channels &&
+            channels.map((channel) => <ChannelItem channel={channel} />)}
+        </List>
+      </Drawer>
+      <Box
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          p: 3,
+          overflowY: 'auto',
+        }}
+      >
+        <Messages />
       </Box>
-    </Container>
+    </Box>
   );
 };
