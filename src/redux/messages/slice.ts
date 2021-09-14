@@ -3,6 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit';
+import { RootState } from 'redux/store';
 import { supabase } from 'services/supabase';
 import { definitions } from 'types/supabase';
 
@@ -24,9 +25,6 @@ export const fetchMessages = createAsyncThunk(
         .eq('channel_id', channelId)
         .order('inserted_at', { ascending: true });
 
-      console.log('channel_id', channelId);
-      console.log('messages:', body);
-
       if (error) thunkAPI.rejectWithValue(error);
 
       return body;
@@ -35,6 +33,30 @@ export const fetchMessages = createAsyncThunk(
     }
   }
 );
+
+export const addMessage = createAsyncThunk<
+  Message | null | undefined,
+  { message: string; channel_id: string },
+  { state: RootState }
+>('messages/addMessage', async ({ message, channel_id }, thunkAPI) => {
+  try {
+    const author = thunkAPI.getState().user.user;
+
+    if (!author) return null;
+
+    const { body, error } = await supabase
+      .from<definitions['messages']>('messages')
+      .insert([{ message, channel_id, user_id: author.id }]);
+
+    if (error) thunkAPI.rejectWithValue(error);
+
+    if (!body) return null;
+
+    return { ...body[0], author } as Message;
+  } catch (error) {
+    thunkAPI.rejectWithValue(error);
+  }
+});
 
 export const messagesSlice = createSlice({
   name: 'messages',
@@ -48,6 +70,11 @@ export const messagesSlice = createSlice({
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       if (action.payload) {
         messagesAdapter.setAll(state, action.payload);
+      }
+    });
+    builder.addCase(addMessage.fulfilled, (state, action) => {
+      if (action.payload) {
+        messagesAdapter.addOne(state, action.payload);
       }
     });
   },

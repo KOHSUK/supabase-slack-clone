@@ -36,7 +36,7 @@ export interface definitions {
 
   /** Profile data for each user. */
   users: {
-    id: number;
+    id: string;
     username?: string;
     status?: UserStatus;
   };
