@@ -9,9 +9,9 @@ import {
   ListItemButton,
   Typography,
 } from '@material-ui/core';
-import { useStore } from 'hooks/use-store';
+import { useDataLoader } from 'hooks/use-data-loader';
 import { Link, useParams } from 'react-router-dom';
-import { Messages } from './messages';
+import { Messages } from './message';
 import { useAuth } from 'hooks/use-auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { channelsSelectors } from 'redux/channels/selector';
@@ -30,7 +30,7 @@ const ChannelItem: React.VFC<{ channel: Channel }> = ({ channel }) => {
 
 export const Channels: React.VFC = () => {
   const { channelId } = useParams();
-  useStore({ channelId: channelId });
+  useDataLoader({ channelId: channelId });
 
   const { signOut } = useAuth();
 
@@ -50,6 +50,7 @@ export const Channels: React.VFC = () => {
       .replace(/^-+/, '') // Trim - from start of text
       .replace(/-+$/, ''); // Trim - from end of text
   };
+
   const user = useSelector(userSelector);
 
   const handleNewChannel = async () => {

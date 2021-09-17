@@ -18,7 +18,7 @@ const Message = styled(Paper)(({ theme }) => ({
   textAlign: 'left',
   color: theme.palette.text.secondary,
   width: '100%',
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(2),
 }));
 
 type FormInput = {
@@ -27,6 +27,7 @@ type FormInput = {
 
 export const Messages: React.VFC = () => {
   const messages = useSelector(messagesSelectors.selectAll);
+
   const { control, handleSubmit, reset } = useForm({
     defaultValues: { message: '' },
   });

@@ -5,7 +5,7 @@ import { fetchChannels } from 'redux/channels/slice';
 import { fetchMessages } from 'redux/messages/slice';
 import { fetchUser } from 'redux/user/slice';
 
-export const useStore = (props: { channelId: string }) => {
+export const useDataLoader = (props: { channelId: string }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
