@@ -12,17 +12,20 @@ import { Home } from 'components/home';
 const App: React.VFC = () => {
   return (
     <StoreProvider>
-      <AuthListener>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthListener>
           <Routes>
             <Route path="/" element={<Home />} />
             <PublicRoute path="/signin" element={<Signin />} />
             <PublicRoute path="/check-email" element={<CheckEmail />} />
-            <PrivateRoute path="/channels" element={<Channels />} />
+            <PrivateRoute path="/channels">
+              <Route element={<Channels />} />
+              <Route path="/:channelId" element={<Channels />} />
+            </PrivateRoute>
             <Route path="*" element={<div>Not Found</div>} />
           </Routes>
-        </BrowserRouter>
-      </AuthListener>
+        </AuthListener>
+      </BrowserRouter>
     </StoreProvider>
   );
 };
